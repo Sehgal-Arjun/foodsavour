@@ -25,7 +25,7 @@ class Signup {
                     "025000054167":{date:"2023/11/13", productName:"fake name"} // REMOVE 
                 }
             }).then(()=>{
-                window.location.assign("/productsapi.html");
+                window.location.assign("/foodsavour/productsapi.html");
             })
             
         }).catch((error)=>{
