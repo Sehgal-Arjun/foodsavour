@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/tablestyle.css">
-    <title>Product Name and All You Need To Know About It</title>
+    <title>Your Ingredients</title>
     <!-- slider stylesheet -->
     <link rel="stylesheet" type="text/css"
     href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.1.3/assets/owl.carousel.min.css" />
@@ -52,9 +52,6 @@
                 <li class="nav-item">
                   <a class="nav-link" href="productsapi.html">Your Ingredients</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="login.html">Log In</a>
-                </li>
               </ul>
             </div>
           </div>
@@ -69,49 +66,17 @@
     <section class="contact_section layout_padding">
         <div class="container">
             <h2 class="font-weight-bold">
-            Product Name and All You Need to Know About It
+            Your Ingredients
             </h2>
             <div class="row">
             <div class="col-md-8 mr-auto">
                 <form id="login">
-                <div class="contact_form-container">
-                    <div>
-                    <div class="mt-5">
-                      <!--<button id = "fetchproductbutton" type="button" onclick=DisplayProduct.fetchProduct(this.id)>Fetch Product</button>-->  
-                    </div>
-                    
+                <div id="ingredient-list" class="contact_form-container">
                     <br>
-                    </div>
-                    <table border="2" style="width:120%;">
-                        <thead>
-                            <tr>
-                                <th>Attributes</th>
-                                <th>Details</th>
-                            </tr>
-                        </thead>
-                        <tbody id="productInfoBody">
-                            <!-- Product information will be displayed here -->
-                            <tr>
-                                <td>Product Name</td>
-                                <td id="productName"></td>
-                            </tr>
-                            <tr>
-                                <td>Allergy Warning</td>
-                                <td id="allergyWarning"></td>
-                            </tr>
-                            <tr>
-                                <td>Nutrient Levels</td>
-                                <td id="nutrientLevels"></td>
-                            </tr>
-                            <tr>
-                                <td>Nutrition Data</td>
-                                <td id="nutritionData"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-    
+                    <!-- induvidual product -->
+
+                    <!-- end induvidual product -->
                 </div>
-    
                 </form>
             </div>
             </div>
@@ -124,3 +89,4 @@
     <script src="js/productsapi.js" type="module"></script>
 </body>
 </html>
+

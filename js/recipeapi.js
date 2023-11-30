@@ -66,4 +66,3 @@ for (let i = 0; i < test.length; i++){
     let addingtext = '<div class="row layout_padding2"><div class="col-md-8"><div class="fruit_detail-box"><h3>'+test[i].name+'</h3><p class="mt-4 mb-5">'+ingandmes+'</p><div><a href="' + test[i].url + '" class="custom_dark-btn">See More</a></div></div></div><div class="col-md-4 d-flex justify-content-center align-items-center"><div class="fruit_img-box d-flex justify-content-center align-items-center"><img src="' + test[i].image + '" alt="" class="" width="250px" /></div></div></div>';
     container.innerHTML = container.innerHTML + addingtext;
 } 
-

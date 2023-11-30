@@ -1,5 +1,5 @@
 import {System} from "../firebase/system.js";
-import {get, ref, set, update} from  "https://www.gstatic.com/firebasejs/10.5.2/firebase-database.js";
+import {get, ref, set, update, remove} from  "https://www.gstatic.com/firebasejs/10.5.2/firebase-database.js";
 
 class DatabaseAccess {
     constructor() {
@@ -73,9 +73,28 @@ class DatabaseAccess {
             })
         })
     }
+
+    isLoggedIn() {
+        this.system.auth.getUser().then((user)=>{
+            if(user) {
+                return true;
+            } else {
+                return false;
+            }
+        }).catch((error)=>{
+            return false;
+        })
+    }
     
     deleteBarcode(barcode) {
-
+        console.log(`attempting to delete barcode ${barcode}`)
+        return new Promise((resolve, reject)=> {
+            this.system.auth.getUser().then((user)=>{
+                remove(ref(this.system.db, `users/${user.uid}/pantry/${barcode}`)).then(()=>{resolve()}).catch((error)=>{console.log(error);reject(error)});
+            }).catch((error)=>{
+                reject(error);
+            })
+        })
     }
 
 

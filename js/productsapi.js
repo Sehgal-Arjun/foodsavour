@@ -27,9 +27,9 @@ class DisplayProduct {
                     // const newTable = document.createElement('table');
                     // this.tableContainer.appendChild(newTable);
 
-                    this.tableContainer = document.querySelector('.tableContainer');
+                    // this.tableContainer = document.querySelector('.tableContainer');
 
-                    this.displayProductInfo(product);
+                    this.displayProductInfo(product, i, barcodes[i]);
 
                     this.databaseAccess.setProductName(currentBarcode, currentProductName);
                } catch(error)
@@ -44,10 +44,6 @@ class DisplayProduct {
             }
         });
 
-        this.databaseAccess.setProductName("025000054167", "grapes").then(()=>{
-            this.databaseAccess.getProductObjects().then((products)=>{
-            });
-        });
     }
 
    async fetchProduct(barcode) {
@@ -93,44 +89,36 @@ class DisplayProduct {
 
     //         });
     }
-    displayProductInfo(product) {
+    displayProductInfo(product,uid, barcode) {
+        let tableElement =`<table border=2 style=width:120%><thead><tr><th colspan=2 id=productName>${product.product_name}<tbody id=productInfoBody><tr><td>Allergy Warning<td id=allergyWarning>${product.allergens_from_ingredients}<tr><td>Nutrient Levels<td id=nutrientLevels>${Array.isArray(product.nutrient_levels_tags) ? product.nutrient_levels_tags.join(', ') : 'N/A'}<tr><td>Nutrition Data<td id=nutritionData>${this.formatNutritionData(product.nutriscore_data)}<tr><td colspan=2><button type="button" id=${uid}>Delete Ingredient</button></table>`;
+        // insert table element
+        let container = document.getElementById('ingredient-list')
+        container.insertAdjacentHTML('afterbegin', tableElement)
+        // bind remove button
+        let removeButton = document.getElementById(uid);
+        removeButton.addEventListener('click', ()=>{this.databaseAccess.deleteBarcode(barcode)})
         
-        const newTable = document.createElement('table');
-        this.tableContainer.appendChild(newTable);
 
-        const tableBody = newTable.createTBody();
+        // const infoToDisplay = {
+        //     'Product Name': product.product_name,
+        //     'Allergy Warning': product.allergens_from_ingredients,
+        //     'Nutrient Levels': Array.isArray(product.nutrient_levels_tags) ? product.nutrient_levels_tags.join(', ') : 'N/A',
+        //     'Nutrition Data': this.formatNutritionData(product.nutriscore_data),
+        // };
 
-       // console.log('Displaying product info:', product);
+        // for (const key in infoToDisplay) {
+        //     // const value = infoToDisplay[key];
+        //     // const row = `<tr><td>${key}</td><td>${value}</td></tr>`;
+        //     // tableBody.innerHTML += row;
+        //     const value = infoToDisplay[key];
 
-        // const newTable = document.createElement('table');
-        // this.tableContainer.appendChild(newTable);
+        //     const row = tableBody.insertRow(); // create a new row
+        //     const cell1 = row.insertCell(0); // create cells
+        //     const cell2 = row.insertCell(1);
 
-        // const tableBody = newTable.createTBody();
-
-//        const tableBody = document.getElementById('productInfoBody');
-      //  tableBody.innerHTML = ''; // Clear previous data
-
-        const infoToDisplay = {
-            'Product Name': product.product_name,
-            'Allergy Warning': product.allergens_from_ingredients,
-            'Nutrient Levels': Array.isArray(product.nutrient_levels_tags) ? product.nutrient_levels_tags.join(', ') : 'N/A',
-            'Nutrition Data': this.formatNutritionData(product.nutriscore_data),
-        };
-
-        for (const key in infoToDisplay) {
-            // const value = infoToDisplay[key];
-            // const row = `<tr><td>${key}</td><td>${value}</td></tr>`;
-            // tableBody.innerHTML += row;
-
-            const value = infoToDisplay[key];
-
-            const row = tableBody.insertRow(); // create a new row
-            const cell1 = row.insertCell(0); // create cells
-            const cell2 = row.insertCell(1);
-
-           cell1.textContent = key; // set cell content
-           cell2.textContent = value;
-        }
+        //    cell1.textContent = key; // set cell content
+        //    cell2.textContent = value;
+        // }
 
     }
 

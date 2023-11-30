@@ -17,7 +17,10 @@ class InputIngredients {
         console.log('inputting')
         const barcode = document.getElementById('barcode').value;
         const date = document.getElementById('date').value;
-        this.databaseAccess.addBarcode(barcode,date).then(()=>{console.log('done')}).catch((error)=>{console.log(error)});
+        this.databaseAccess.addBarcode(barcode,date).then(()=>{
+            console.log('done')
+            document.getElementById("successmessage").style.display = "block";
+        }).catch((error)=>{console.log(error)});
     }
 }
 
