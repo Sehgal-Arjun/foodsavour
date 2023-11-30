@@ -25,7 +25,7 @@ class Signup {
                     "025000054167":{date:"2023/11/13", productName:"fake name"} // REMOVE 
                 }
             }).then(()=>{
-                window.location.assign("/foodsavour/productsapi.html");
+                window.location.href = 'https://sehgal-arjun.github.io/foodsavour/productsapi.html';
             })
             
         }).catch((error)=>{
