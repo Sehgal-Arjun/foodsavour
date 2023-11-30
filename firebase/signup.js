@@ -22,7 +22,6 @@ class Signup {
             set(ref(this.system.db, `users/${user.uid}`), {
                 email: email,
                 pantry: {
-                    "025000054167":{date:"2023/11/13", productName:"fake name"} // REMOVE 
                 }
             }).then(()=>{
                 window.location.assign("/productsapi.html");

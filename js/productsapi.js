@@ -90,7 +90,7 @@ class DisplayProduct {
     //         });
     }
     displayProductInfo(product,uid, barcode) {
-        let tableElement =`<table border=2 style=width:120%><thead><tr><th colspan=2 id=productName>${product.product_name}<tbody id=productInfoBody><tr><td>Allergy Warning<td id=allergyWarning>${product.allergens_from_ingredients}<tr><td>Nutrient Levels<td id=nutrientLevels>${Array.isArray(product.nutrient_levels_tags) ? product.nutrient_levels_tags.join(', ') : 'N/A'}<tr><td>Nutrition Data<td id=nutritionData>${this.formatNutritionData(product.nutriscore_data)}<tr><td colspan=2><button type="button" id=${uid}>Delete Ingredient</button></table>`;
+        let tableElement =`<table border=2 style=width:120%><thead><tr><th colspan=2 id=productName>${product.product_name}<tbody id=productInfoBody><tr><td>Allergy Warning<td id=allergyWarning>${product.allergens_from_ingredients}<tr><td>Nutrient Levels<td id=nutrientLevels>${Array.isArray(product.nutrient_levels_tags) ? product.nutrient_levels_tags.join(', ') : 'N/A'}<tr><td>Nutrition Data<td id=nutritionData>${this.formatNutritionData(product.nutriscore_data)}<tr><td colspan=2><button id=${uid}>Delete Ingredient</button></table>`;
         // insert table element
         let container = document.getElementById('ingredient-list')
         container.insertAdjacentHTML('afterbegin', tableElement)

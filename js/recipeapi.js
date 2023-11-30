@@ -50,7 +50,7 @@ function filterResponse(data){
     return recipes;
 }
 
-var test = await sendEdamamApiRequest("coffee");
+var test = await sendEdamamApiRequest("pizza");
 console.log(test);
 console.log(test[0].name);
 
