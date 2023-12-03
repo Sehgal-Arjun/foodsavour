@@ -95,14 +95,17 @@ class DisplayProduct {
         let sanitizedNutrientLevelsTags = Array.isArray(product.nutrient_levels_tags) ? 
             product.nutrient_levels_tags.map(level => level.replace(/-/g, ' ').replace(/en:/g, '')) : [];
 
-        let tableElement =`<table border="2" style="width:120%"><thead><tr><th colspan="2" id="productName">${product.product_name}<tbody id="productInfoBody"><tr><td>Allergy Warning<td id="allergyWarning">${sanitizedProductAllergens}<tr><td>Nutrient Levels<td id="nutrientLevels">${sanitizedNutrientLevelsTags.join(', ') || 'N/A'}<tr><td>Nutrition Data<td id="nutritionData">${this.formatNutritionData(product.nutriments)}<tr><td colspan="2"><button id="${uid}">Delete Ingredient</button></table>`;
+        //let tableElement =`<table border="2" style="width:120%"><thead><tr><th colspan="2" id="productName">${product.product_name}<tbody id="productInfoBody"><tr><td>Allergy Warning<td id="allergyWarning">${sanitizedProductAllergens}<tr><td>Nutrient Levels<td id="nutrientLevels">${sanitizedNutrientLevelsTags.join(', ') || 'N/A'}<tr><td>Nutrition Data<td id="nutritionData">${this.formatNutritionData(product.nutriments)}<tr><td colspan="2"><button id="${uid}">Delete Ingredient</button></table>`;
 
-        // insert table element
-        let container = document.getElementById('ingredient-list')
-        container.insertAdjacentHTML('afterbegin', tableElement)
-        // bind remove button
-        let removeButton = document.getElementById(uid);
-        removeButton.addEventListener('click', ()=>{this.databaseAccess.deleteBarcode(barcode)})
+        this.databaseAccess.getExpiryFromBarcode(barcode).then((expiry)=>{
+            let tableElement =`<table border="2" style="width:120%"><thead><tr><th colspan="2" id="productName">${product.product_name}<tbody id="productInfoBody"><tr><td>Allergy Warning<td id="allergyWarning">${sanitizedProductAllergens}<tr><td>Nutrient Levels<td id="nutrientLevels">${sanitizedNutrientLevelsTags.join(', ') || 'N/A'}<tr><td>Nutrition Data<td id="nutritionData">${this.formatNutritionData(product.nutriments)}<tr><tr><td>Expiry Date</td><td id="expiryDate">${expiry}</td></tr><td colspan="2"><button id="${uid}">Delete Ingredient</button></table><br>`;
+            // insert table element
+            let container = document.getElementById('ingredient-list')
+            container.insertAdjacentHTML('afterbegin', tableElement)
+            // bind remove button
+            let removeButton = document.getElementById(uid);
+            removeButton.addEventListener('click', ()=>{this.databaseAccess.deleteBarcode(barcode)})
+        })
         
 
         // const infoToDisplay = {

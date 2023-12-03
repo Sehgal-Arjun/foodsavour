@@ -17,11 +17,15 @@ class GenerateRecipe {
         this.system = new System();
         this.databaseAccess = new DatabaseAccess();
         var ingredients = this.databaseAccess.getProductNames().then((ingredients)=>{
-            var barcodes = this.databaseAccess.getProductBarcodes().then((barcodes)=>{
+            var dates = this.databaseAccess.getProductDates().then(async(dates)=>{
                 try {
                     // var recipes = this.searchIngredients(ingredients, expiry);
-                    localStorage.setItem("TestIngredients2", test);
-                
+                    console.log(ingredients);
+                    console.log(dates);
+                    var display = await this.searchIngredients(ingredients, dates);
+                    
+                    console.log(display);
+                    this.displayRecipe(display);                
                 } catch(error) {
                     console.error(`Error generating recipes:`, error);
                 }
@@ -29,26 +33,49 @@ class GenerateRecipe {
     });
 }
 
+async shortenList(ingredients) {
+    const apiKEY = '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';
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKEY}`,
+        },
+        body: JSON.stringify({
+            model: 'gpt-3.5-turbo',
+            messages: [{ role: 'user', content: 'Remove the ingredient least likely to be in a recipe from the list: ' + ingredients.toString() + ' and return the remaining ingredients as a list of strings with single quotation marks separated by commas with no brackets, do not include extra words, if there is only one word return an empty response' }],
+            temperature: 0.7,
+        }),
+    });
+    var data = await response.json();
+    var temp = data.choices[0].message.content;
+    console.log(temp);
+    console.log(data);
+    return temp;
+}
 
-    async shortenList(ingredients) {
-    const completion = await openai.createCompletion({
-        model: "text-davinci-003",
-        prompt: "Remove the ingredient least likely to be in a recipe from the list: " + ingredients.toString() + " and return the remaining ingredients as a list of strings with single quotation marks separated by commas with no brackets",
-        temperature: 0,
-        max_tokens: 500
-    })
-    return completion.data.choices[0].text;
-    }
+async removeBrackets(ingredients) {
+    const apiKEY = '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';
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKEY}`,
+        },
+        body: JSON.stringify({
+            model: 'gpt-3.5-turbo',
+            messages: [{ role: 'user', content: 'Return the first seven of the following ingredients: '  + ingredients.toString() + ' as a list of strings with single quotation marks separated by commas with no brackets, if any ingredient includes brand names remove it' }],
+            temperature: 0.7,
+        }),
+    });
+    var data = await response.json();
+    var temp = data.choices[0].message.content;
+    console.log(temp);
+    console.log(data);
+    return temp;
+}
 
-    async removeBrackets(ingredients) {
-        const completion = await openai.createCompletion({
-            model: "text-davinci-003",
-            prompt: "Return the first seven of the following ingredients: "  + ingredients.toString() + "as a list of strings with single quotation marks separated by commas with no brackets",
-            temperature: 0,
-            max_tokens: 500
-        })
-        return completion.data.choices[0].text;
-        }
+
 
     /**
      * This is an asynchronous function for sending an Edamam API request based on queries.
@@ -128,23 +155,24 @@ class GenerateRecipe {
     }
 
 
-    async searchIngredients(ingredients, barcodes) {
+    async searchIngredients(ingredients, dates) {
         var ingredientsArray = ingredients;
-        var expiryDates = new Array(barcodes.length); 
-        for (var i = 0; i < barcodes.length; i++) {
-            const temp = this.databaseAccess.getExpiryFromBarcode(barcodes[i]).split("-");
+        var expiryDates = new Array(dates.length); 
+        for (var i = 0; i < dates.length; i++) {
+            const temp = dates[i].split("-");
             expiryDates[i] = new Date(parseInt(temp[0]), parseInt(temp[1]), parseInt(temp[2]));
         }
         console.log(ingredientsArray);
-        var sortedIngredients = sortExpiry(ingredientsArray, expiryDates, ingredientsArray.length);
+        var sortedIngredients = this.sortExpiry(ingredientsArray, expiryDates, ingredientsArray.length);
         console.log(sortedIngredients);
-        var test = await removeBrackets(sortedIngredients);
+        var test = await this.removeBrackets(sortedIngredients);
         console.log(test);
-        while(await sendEdamamApiRequest(test) == false) {
-            var test = await shortenList(test);
+        while(await this.sendEdamamApiRequest(test) == false && test.length > 0) {
+            var test = await this.shortenList(test);
             console.log(test);
         }
-        return test;
+        var recipes = await this.sendEdamamApiRequest(test);
+        return recipes;
     }
 
     displayRecipe(test) {
