@@ -47,7 +47,7 @@ class DisplayProduct {
     }
 
    async fetchProduct(barcode) {
-        const apiUrl = `https://world.openfoodfacts.org/api/v2/product/${barcode}?fields=product_name,nutriscore_data,nutrient_levels_tags,allergens_from_ingredients`;
+        const apiUrl = `https://world.openfoodfacts.org/api/v2/product/${barcode}?fields=product_name,nutriments,nutrient_levels_tags,allergens_from_ingredients`;
 
         try {
             const response = await fetch(apiUrl);
@@ -90,7 +90,13 @@ class DisplayProduct {
     //         });
     }
     displayProductInfo(product,uid, barcode) {
-        let tableElement =`<table border=2 style=width:120%><thead><tr><th colspan=2 id=productName>${product.product_name}<tbody id=productInfoBody><tr><td>Allergy Warning<td id=allergyWarning>${product.allergens_from_ingredients}<tr><td>Nutrient Levels<td id=nutrientLevels>${Array.isArray(product.nutrient_levels_tags) ? product.nutrient_levels_tags.join(', ') : 'N/A'}<tr><td>Nutrition Data<td id=nutritionData>${this.formatNutritionData(product.nutriscore_data)}<tr><td colspan=2><button id=${uid}>Delete Ingredient</button></table>`;
+        const sanitizedProductAllergens = product.allergens_from_ingredients.toLowerCase().split('en:').join('');
+
+        let sanitizedNutrientLevelsTags = Array.isArray(product.nutrient_levels_tags) ? 
+            product.nutrient_levels_tags.map(level => level.replace(/-/g, ' ').replace(/en:/g, '')) : [];
+
+        let tableElement =`<table border="2" style="width:120%"><thead><tr><th colspan="2" id="productName">${product.product_name}<tbody id="productInfoBody"><tr><td>Allergy Warning<td id="allergyWarning">${sanitizedProductAllergens}<tr><td>Nutrient Levels<td id="nutrientLevels">${sanitizedNutrientLevelsTags.join(', ') || 'N/A'}<tr><td>Nutrition Data<td id="nutritionData">${this.formatNutritionData(product.nutriments)}<tr><td colspan="2"><button id="${uid}">Delete Ingredient</button></table>`;
+
         // insert table element
         let container = document.getElementById('ingredient-list')
         container.insertAdjacentHTML('afterbegin', tableElement)
@@ -125,10 +131,16 @@ class DisplayProduct {
     formatNutritionData(nutriscoreData) {
         if (typeof nutriscoreData === 'object') {
             let result = '';
-    
+            const keysToLog = ['fat', 'sugars', 'carbohydrates', 'energy-kcal_100g', 'sodium', 'proteins'];
+
             for (const key in nutriscoreData) {
-                const value = nutriscoreData[key];
-                result += `${key}: ${value}<br>`;
+                if (keysToLog.includes(key)) {
+                    const value = nutriscoreData[key];
+                //    console.log(`${key}: ${value}g`);
+                    result += `-> ${key}: ${value}g<br>`;
+                    result+='<br>';
+                }
+
             }
     
             return result;
@@ -136,6 +148,7 @@ class DisplayProduct {
             return 'N/A';
         }
     }
+
 
     // createProductRow(product) {
     //     // Assuming you have a table in your HTML with an id 'productTable'

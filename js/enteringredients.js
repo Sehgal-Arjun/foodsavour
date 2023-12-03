@@ -20,6 +20,8 @@ class InputIngredients {
         this.databaseAccess.addBarcode(barcode,date).then(()=>{
             console.log('done')
             document.getElementById("successmessage").style.display = "block";
+            document.getElementById("barcode").value = "";
+            document.getElementById("date").value = "";
         }).catch((error)=>{console.log(error)});
     }
 }
