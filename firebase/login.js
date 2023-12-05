@@ -16,7 +16,7 @@ class Login {
         const password = document.getElementById('password').value;
         signInWithEmailAndPassword(this.auth, email, password).then((userCredential)=>{
             this.system.user = userCredential.user;
-            window.location.assign("/productsapi.html");
+            window.location.href = 'https://sehgal-arjun.github.io/foodsavour/productsapi.html';
             console.log('suuccess');
         }).catch((error)=> {
             console.log(error);
