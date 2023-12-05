@@ -61,9 +61,7 @@
                 <li class="nav-item">
                   <a class="nav-link" href="productsapi.html">Your Ingredients</a>
                 </li>
-                <li class="nav-item">
-                  <a id="loginheadertext" class="nav-link" href="login.html">Log In</a>
-                </li>
+
               </ul>
             </div>
           </div>
@@ -80,7 +78,7 @@
     <div class="container">
       <h2 class="custom_heading">Input Ingredients</h2>
       <p class="custom_heading-text">
-        Input your expiry date and use the barcode scanner to input the barcode. Then, click submit!
+        Use the barcode scanner to input the barcode and input your expiry date. Then, click submit!
       </p>
     </div>
   </section>
@@ -91,12 +89,17 @@
         <div class="contact_form-container" style="width:60%;">
           <div>
             <div>
-              <input class="dateinput" id="date" type="date" placeholder="Expiry Date">
-            </div>
-            <div>
               <input class="dateinput" id="barcode" type="text" placeholder="Barcode">
             </div>
+            <div>
+              <input class="dateinput" id="date" type="date">
+            </div>
             <br>
+            <div id="centerbuttonhere" class="mt-5">
+              <button class ="centerthisbutton" type="submit">
+                Submit
+              </button>
+            </div>
             <div class="container">
               <br>
               <p id="successmessage" class="custom_heading-text green" style="color:green; display:none;">
@@ -105,11 +108,6 @@
               <p id="errormessage" class="custom_heading-text green" style="color:red; display:none;">
                 Error with your input!
               </p>
-            </div>
-            <div id="centerbuttonhere" class="mt-5">
-              <button class ="centerthisbutton" type="submit">
-                Submit
-              </button>
             </div>
           </div>
 
@@ -135,7 +133,6 @@
   <script src="js/enteringredients.js" type="module"></script>
   <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
   <script type="text/javascript" src="js/bootstrap.js"></script>
-  <script type="module" src="js/loggedin.js"></script>
 </body>
 
 </html>

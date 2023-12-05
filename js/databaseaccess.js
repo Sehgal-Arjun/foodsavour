@@ -25,7 +25,6 @@ class DatabaseAccess {
 
         })
     }
-
     getProductNames() {
         return new Promise((resolve, reject)=>
         {
@@ -45,27 +44,6 @@ class DatabaseAccess {
         })     
         })
     }
-
-    getProductDates() {
-        return new Promise((resolve, reject)=>
-        {
-        this.system.auth.getUser().then((user)=>{
-            get(ref(this.system.db, `users/${user.uid}/pantry`)).then((snapshot)=>{
-                console.log(snapshot.val());
-                const productNames = []
-                snapshot.forEach((doc)=>{
-                    productNames.push(doc.val().date);
-                });
-                resolve(productNames);
-            }).catch((error)=>{
-                reject(error);
-            })
-        }).catch((error)=>{
-            reject(error);
-        })     
-        })
-    }
-
     // returns just an array of barcodes
     getProductBarcodes() {
         return new Promise((resolve, reject)=>
@@ -136,23 +114,6 @@ class DatabaseAccess {
             })
         })
     }
-    getExpiryFromBarcode(barcode) {
-        return new Promise((resolve, reject)=>
-        {
-            this.system.auth.getUser().then((user)=>{
-                get(ref(this.system.db, `users/${user.uid}/pantry`)).then((snapshot)=>{
-                    //console.log(snapshot.val());
-                    resolve(snapshot.val()[barcode].date);
-                }).catch((error)=>{
-                    reject(error);
-                })
-            }).catch((error)=>{
-                reject(error);
-            })
-
-        })
-    }
-
 
 
 }

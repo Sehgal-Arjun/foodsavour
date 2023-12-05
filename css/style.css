@@ -347,14 +347,14 @@ a:focus {
   right: 0;
   bottom: 0;
   left: 0;
-  /*opacity: 0.5; Set the opacity here */
+  opacity: 0.5; /* Set the opacity here */
 }
 
 .tasty_section h2 {
   font-size: 125px;
   text-align: center;
   font-weight: bold;
-  color: #ffffff;
+  color: #fc5d35;
   text-transform: uppercase;
   position: relative; /* Add position relative */
   z-index: 1; /* Ensure the text appears above the background */
