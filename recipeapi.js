@@ -29,11 +29,11 @@ async function sendEdamamApiRequest(query) {
  * @returns Array of recipe responses
  */
 function filterResponse(data){
-    var len = data.hits.length;
     if (data != null && data != undefined && typeof data != 'object'){
         console.log("This is not an object.");
         return false;
     }
+    var len = data.hits.length;
     if (len == 0){
         return false;
     }

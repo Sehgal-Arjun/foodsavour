@@ -47,7 +47,8 @@ class DisplayProduct {
     }
 
    async fetchProduct(barcode) {
-    const apiUrl = `https://world.openfoodfacts.org/api/v2/product/${barcode}?fields=product_name,nutriments,nutrient_levels_tags,allergens_from_ingredients`;
+        const apiUrl = `https://world.openfoodfacts.org/api/v2/product/${barcode}?fields=product_name,nutriments,nutrient_levels_tags,allergens_from_ingredients`;
+
         try {
             const response = await fetch(apiUrl);
             const data = await response.json();
@@ -94,14 +95,39 @@ class DisplayProduct {
         let sanitizedNutrientLevelsTags = Array.isArray(product.nutrient_levels_tags) ? 
             product.nutrient_levels_tags.map(level => level.replace(/-/g, ' ').replace(/en:/g, '')) : [];
 
-        let tableElement =`<table border="2" style="width:120%"><thead><tr><th colspan="2" id="productName">${product.product_name}<tbody id="productInfoBody"><tr><td>Allergy Warning<td id="allergyWarning">${sanitizedProductAllergens}<tr><td>Nutrient Levels<td id="nutrientLevels">${sanitizedNutrientLevelsTags.join(', ') || 'N/A'}<tr><td>Nutrition Data<td id="nutritionData">${this.formatNutritionData(product.nutriments)}<tr><td colspan="2"><button id="${uid}">Delete Ingredient</button></table>`;
-        // insert table element
-        let container = document.getElementById('ingredient-list')
-        container.insertAdjacentHTML('afterbegin', tableElement)
-        // bind remove button
-        let removeButton = document.getElementById(uid);
-        removeButton.addEventListener('click', ()=>{this.databaseAccess.deleteBarcode(barcode)})
+        //let tableElement =`<table border="2" style="width:120%"><thead><tr><th colspan="2" id="productName">${product.product_name}<tbody id="productInfoBody"><tr><td>Allergy Warning<td id="allergyWarning">${sanitizedProductAllergens}<tr><td>Nutrient Levels<td id="nutrientLevels">${sanitizedNutrientLevelsTags.join(', ') || 'N/A'}<tr><td>Nutrition Data<td id="nutritionData">${this.formatNutritionData(product.nutriments)}<tr><td colspan="2"><button id="${uid}">Delete Ingredient</button></table>`;
+
+        this.databaseAccess.getExpiryFromBarcode(barcode).then((expiry)=>{
+            let tableElement =`<table border="2" style="width:120%"><thead><tr><th colspan="2" id="productName">${product.product_name}<tbody id="productInfoBody"><tr><td>Allergy Warning<td id="allergyWarning">${sanitizedProductAllergens}<tr><td>Nutrient Levels<td id="nutrientLevels">${sanitizedNutrientLevelsTags.join(', ') || 'N/A'}<tr><td>Nutrition Data<td id="nutritionData">${this.formatNutritionData(product.nutriments)}<tr><tr><td>Expiry Date</td><td id="expiryDate">${expiry}</td></tr><td colspan="2"><button id="${uid}">Delete Ingredient</button></table><br>`;
+            // insert table element
+            let container = document.getElementById('ingredient-list')
+            container.insertAdjacentHTML('afterbegin', tableElement)
+            // bind remove button
+            let removeButton = document.getElementById(uid);
+            removeButton.addEventListener('click', ()=>{this.databaseAccess.deleteBarcode(barcode)})
+        })
         
+
+        // const infoToDisplay = {
+        //     'Product Name': product.product_name,
+        //     'Allergy Warning': product.allergens_from_ingredients,
+        //     'Nutrient Levels': Array.isArray(product.nutrient_levels_tags) ? product.nutrient_levels_tags.join(', ') : 'N/A',
+        //     'Nutrition Data': this.formatNutritionData(product.nutriscore_data),
+        // };
+
+        // for (const key in infoToDisplay) {
+        //     // const value = infoToDisplay[key];
+        //     // const row = `<tr><td>${key}</td><td>${value}</td></tr>`;
+        //     // tableBody.innerHTML += row;
+        //     const value = infoToDisplay[key];
+
+        //     const row = tableBody.insertRow(); // create a new row
+        //     const cell1 = row.insertCell(0); // create cells
+        //     const cell2 = row.insertCell(1);
+
+        //    cell1.textContent = key; // set cell content
+        //    cell2.textContent = value;
+        // }
 
     }
 
@@ -125,6 +151,7 @@ class DisplayProduct {
             return 'N/A';
         }
     }
+
 
     // createProductRow(product) {
     //     // Assuming you have a table in your HTML with an id 'productTable'

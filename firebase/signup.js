@@ -24,7 +24,7 @@ class Signup {
                 pantry: {
                 }
             }).then(()=>{
-                window.location.href = 'https://sehgal-arjun.github.io/foodsavour/productsapi.html';
+                window.location.assign("/productsapi.html");
             })
             
         }).catch((error)=>{
